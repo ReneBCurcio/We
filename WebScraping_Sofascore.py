@@ -1,5 +1,6 @@
 import requests
 from fake_useragent import UserAgent
+import pandas as pd
 
 ua = UserAgent()
 ##
@@ -53,22 +54,30 @@ def escolher_time(time: str):
         if not 'error' in api_link:
             data_list.append(api_link['statistics'])
             if url_list.index(url_list[cont_url_list]) == 0:
-                data_list[cont_data_list]['ano'] = '2018/2019'
+                data_list[cont_data_list]['ano'] = 2018
             elif url_list.index(url_list[cont_url_list]) == 1:
-                data_list[cont_data_list]['ano'] = '2019/2020'
+                data_list[cont_data_list]['ano'] = 2019
             elif url_list.index(url_list[cont_url_list]) == 2:
-                data_list[cont_data_list]['ano'] = '2020/2021'
+                data_list[cont_data_list]['ano'] = 2020
             elif url_list.index(url_list[cont_url_list]) == 3:
-                data_list[cont_data_list]['ano'] = '2021/2022'
+                data_list[cont_data_list]['ano'] = 2021
             elif url_list.index(url_list[cont_url_list]) == 4:
-                data_list[cont_data_list]['ano'] = '2022/2023'
+                data_list[cont_data_list]['ano'] = 2022
             elif url_list.index(url_list[cont_url_list]) == 5:
-                data_list[cont_data_list]['ano'] = '2023/2024'
+                data_list[cont_data_list]['ano'] = 2023
+            cont_data_list += 1
         cont_url_list += 1
-    x = requests.get('https://api.sofascore.com/api/v1/team/17/unique-tournament/17/season/52186/statistics/overall', headers=browser)
 
-    return print(data_list
-                 )
+    return data_list
 
 
-escolher_time('Manchester City')
+def dataframe(time: str):
+    team = escolher_time(time)
+    time_df = pd.DataFrame(index=team[0].keys())
+
+    for i in range(len(team)-1):
+        time_df[str(team[i]['ano'])] = team[i].values()
+        time_df[str(team[i]['ano'])] = team[i].values()
+        time_df[str(team[i]['ano'])] = time_df[str(team[i]['ano'])].apply(lambda x: float("{:.0f}".format(x)))
+
+    return time_df
